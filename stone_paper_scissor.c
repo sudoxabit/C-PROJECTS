@@ -1,110 +1,62 @@
-/*
-Rock Paper Scissor (which is also called Stone Paper Scissor) is a hand game
-and played between two people, in which each player simultaneously forms one of three shapes.
-The winner of the game is decided as per the below rules:
-//
-Rock vs Paper -> Paper wins.
-Rock vs Scissor -> Rock wins.
-Paper vs Scissor -> Scissor wins.
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
 #include <time.h>
 
-int game(char you, char computer)
-{
-    // If both the user and computer
-    // has choose the same thing
-    if (you == computer)
-        return -1;
+int main() {
+    int userChoice, computerChoice;
+    char *options[] = {"Rock", "Paper", "Scissors"};
+    int rounds, userScore = 0, computerScore = 0;
 
-    // If user's choice is stone and
-    // computer's choice is paper
-    if (you == 's' && computer == 'p')
-        return 0;
+    // Seed random number generator
+    srand(time(0));
 
-    // If user's choice is paper and
-    // computer's choice is stone
-    else if (you == 'p' && computer == 's')
-        return 1;
+    // Initialize the game
+    printf("Welcome to Rock-Paper-Scissors!\n");
+    printf("Enter number of rounds: ");
+    scanf("%d", &rounds);
 
-    // If user's choice is stone and
-    // computer's choice is scissor
-    if (you == 's' && computer == 'z')
-        return 1;
+    // Game loop
+    for (int i = 0; i < rounds; i++) {
+        printf("Choose: 0 for Rock, 1 for Paper, 2 for Scissors: ");
+        scanf("%d", &userChoice);
 
-    // If user's choice is scissor and
-    // computer's choice is stone
-    else if (you == 'z' && computer == 's')
-        return 0;
+        // Validate input
+        if (userChoice < 0 || userChoice > 2) {
+            printf("Invalid choice! Try again.\n");
+            i--; // Repeat the round
+            continue;
+        }
 
-    // If user's choice is paper and
-    // computer's choice is scissor
-    if (you == 'p' && computer == 'z')
-        return 0;
+        // Generate computer's choice
+        computerChoice = rand() % 3;
 
-    // If user's choice is scissor and
-    // computer's choice is paper
-    else if (you == 'z' && computer == 'p')
-        return 1;
-}
+        // Determine the winner
+        printf("You chose: %s, Computer chose: %s\n", options[userChoice], options[computerChoice]);
+        if (userChoice == computerChoice) {
+            printf("It's a draw!\n");
+        } else if ((userChoice == 0 && computerChoice == 2) ||
+                   (userChoice == 1 && computerChoice == 0) ||
+                   (userChoice == 2 && computerChoice == 1)) {
+            printf("You win this round!\n");
+            userScore++;
+        } else {
+            printf("Computer wins this round!\n");
+            computerScore++;
+        }
 
-int main()
-{
-
-    // Stores the random number
-    int n;
-
-    char you, computer, result;
-
-    // Chooses the random number
-    // every time
-    srand(time(NULL));
-
-    // Make the random number less
-    // than 100, divided it by 100
-    n = rand() % 100;
-
-    // Using simple probability 100 is
-    // roughly divided among stone,
-    // paper, and scissor
-    if (n < 33)
-
-        // s is denoting Stone
-        computer = 's';
-
-    else if (n > 33 && n < 66)
-
-        // p is denoting Paper
-        computer = 'p';
-
-    // z is denoting Scissor
-    else
-        computer = 'z';
-
-    printf("\n\n\n\n\t\t\t\tEnter s for STONE, p for PAPER and z for SCISSOR\n\t\t\t\t\t\t\t");
-
-    // input from the user
-    scanf("%c", &you);
-
-    // Function Call to play the game
-    result = game(you, computer);
-
-    if (result == -1)
-    {
-        printf("\n\n\t\t\t\tGame Draw!\n");
+        // Display current score
+        printf("Current Score - You: %d, Computer: %d\n\n", userScore, computerScore);
     }
-    else if (result == 1)
-    {
-        printf("\n\n\t\t\t\tWow! You have won the game!\n");
-    }
-    else
-    {
-        printf("\n\n\t\t\t\tOh! You have lost the game!\n");
-    }
-    printf("\t\t\t\tYOu choose : %c and Computer choose : %c\n", you, computer);
 
+    // Display final result
+    if (userScore > computerScore) {
+        printf("Congratulations! You are the overall winner!\n");
+    } else if (userScore < computerScore) {
+        printf("Computer is the overall winner! Better luck next time.\n");
+    } else {
+        printf("The game is a draw!\n");
+    }
+
+    printf("Thank you for playing!\n");
     return 0;
 }
